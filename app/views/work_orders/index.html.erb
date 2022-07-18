@@ -1,0 +1,88 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Work Orders for 10/1/2019</h1>
+
+
+<div class="master">
+
+
+  <div>
+    <div><br></div>
+
+    <%  @minute.each do |hour| %>
+      <div class="flex_time" ><%= hour %></div>
+
+
+    <%end %>
+<!--    <%#= (work_order.time.strftime('%H:%M').to_d)%>px"-->
+  </div>
+
+
+    <% @technicians.each do |technician| %>
+      <section class="flex-items"  ><%= technician.name %>
+        <% @duration_height = 0 %>
+      <% @work_orders.each  do  |work_order|  %>
+
+          <% next unless work_order.technician_id == technician.id %>
+          <% prior_height = @duration_height%>
+          <div class="empty_box" id="empty_box" onclick="showAlert()"
+               style="height:<%= ((((work_order.time.strftime('%H').to_i) + ((work_order.time.strftime('%M').to_i)*(1.0/100)*(7/3)))*140)-(840+prior_height))%>px">
+
+
+
+            <script> function showAlert(){
+                var empty_box = document.querySelector('.empty_box')
+                var thing = empty_box.getAttribute('style')
+                let width = empty_box.offsetWidth
+                let height = <%= ((((work_order.time.strftime('%H').to_i) + ((work_order.time.strftime('%M').to_i)*(1.0/100)*(7/3)))*140)-(840+prior_height))%>
+                const style = getComputedStyle(empty_box)
+                const duration = style.height
+
+                var onclick1 = onclick(alert(outerWidth + innerHeight))
+
+                var elem = document.getElementById("empty_box");
+                var elemStyle = window.getComputedStyle(elem, null);
+                var heights = elemStyle.getPropertyValue("height")
+
+                alert ("There is" +  duration + 'width:' + width + 'Height:' + thing + heights + outerWidth + outerHeight;
+            }</script>
+
+          </div>
+
+          <div class="work_order" style="height: <%= (work_order.duration/60.0) *140  %>px">
+            <% @locations.each do |location| %>
+            <% next unless work_order.location_id == location.id %>
+              Name:
+              <%=location.name %>
+              </br>
+              City:
+              <%= location.city %>
+              </br>
+              Start Time:
+              <%= work_order.time.strftime('%H:%M') %>
+              </br>
+              Price: $
+              <%= work_order.price %>
+              </br>
+              <% @duration_height = ((work_order.duration/60.0) *140) +((((work_order.time.strftime('%H').to_i) + ((work_order.time.strftime('%M').to_i)*(1.0/100)*(7/3)))*140)-(840+prior_height) + prior_height)%>
+              <% @final_box_height = @duration_height %>
+            <%end %>
+
+
+
+
+
+
+
+          </div>
+
+
+        <% end %>
+        <div class="empty_box" style="height: <%= 1690- @final_box_height %>px"></div>
+
+      </section>
+    <%end %>
+
+
+  </div>
+</div>

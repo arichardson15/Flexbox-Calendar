@@ -10,11 +10,10 @@
     <div><br></div>
 
     <%  @minute.each do |hour| %>
-      <div class="flex_time" ><%= hour %></div>
+      <div class="flex_time" id="hour<%= hour %>"><%= hour %></div>
 
 
     <%end %>
-<!--    <%#= (work_order.time.strftime('%H:%M').to_d)%>px"-->
   </div>
 
 
@@ -24,22 +23,19 @@
         <% @duration_height = 0 %>
       <% @work_orders.each  do  |work_order|  %>
           <% next unless work_order.technician_id == technician.id %>
-          <% count = work_order.id  %>
           <% first_work_time = work_order.time %>
           <% empty_id = @prior_work_time - first_work_time%>
           <% prior_height = @duration_height%>
-          <div class="empty_box" datafld="<%= ((((work_order.time.strftime('%H').to_i) + ((work_order.time.strftime('%M').to_i)*(1.0/100)*(7/3)))*140)-(840+prior_height))%>"
-               onclick="showAlert()" id = "<%= empty_id %>" datafld ='asdfasdf'
+          <div class="empty_box"
+               onclick="showAlert(<%= ((((work_order.time.strftime('%H').to_i) + ((work_order.time.strftime('%M').to_i)*(1.0/100)*(7/3)))*140)-(840+prior_height))%>)" id = "<%= empty_id %>"
                style="height:<%= ((((work_order.time.strftime('%H').to_i) + ((work_order.time.strftime('%M').to_i)*(1.0/100)*(7/3)))*140)-(840+prior_height))%>px">
 
 
 
-            <script> function showAlert(){
-                var empty_box = document.querySelector('.empty_box');
-                var empty = empty_box.getAttribute('id');
+            <script> function showAlert(id){
 
 
-                alert ("There is" + empty );
+                alert ("There is " + (id/140)*60 + " minutes between work orders" );
             }</script>
 
           </div>

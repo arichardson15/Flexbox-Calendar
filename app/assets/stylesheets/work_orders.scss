@@ -34,6 +34,8 @@
 .master{
   display: grid;
   grid-template-columns: repeat(1, 10%) repeat(4, 22.5%);
+  border-bottom: .1px solid black;
+  border-right: .1px solid black;
 
 }
 
@@ -72,9 +74,6 @@
 
 .empty_box{
   display: flex;
-  border: .1px solid black;
-  box-sizing: border-box;
-  height: auto;
 }
 
 #hour5 {

@@ -2,7 +2,6 @@
 
 <h1>Work Orders for 10/1/2019</h1>
 
-
 <div class="master">
 
 
@@ -17,48 +16,59 @@
   </div>
 
 
-    <% @technicians.each do |technician| %>
-      <section class="flex-items"  ><%= technician.name %>
-        <% @prior_work_time =  @work_orders[0].time%>
-        <% @duration_height = 0 %>
+  <% @technicians.each do |technician| %>
+    <section class="flex-items"  style="height: 1710px; position: relative" ><%= technician.name %>
+      <% @prior_work_time =  @work_orders[0].time%>
+      <% @prior_work_duration = 0 %>
+      <% @duration_height = 0 %>
+      <% @work_order_duration_height = 0 %>
       <% @work_orders.each  do  |work_order|  %>
-          <% next unless work_order.technician_id == technician.id %>
-          <% first_work_time = work_order.time %>
-          <% empty_id = @prior_work_time - first_work_time%>
-          <% prior_height = @duration_height%>
-          <div class="empty_box"
-               onclick="showAlert(<%= ((((work_order.time.strftime('%H').to_i) + ((work_order.time.strftime('%M').to_i)*(1.0/100)*(7/3)))*140)-(840+prior_height))%>)" id = "<%= empty_id %>"
-               style="height:<%= ((((work_order.time.strftime('%H').to_i) + ((work_order.time.strftime('%M').to_i)*(1.0/100)*(7/3)))*140)-(840+prior_height))%>px">
+        <% next unless work_order.technician_id == technician.id %>
+        <% first_work_time = work_order.time %>
+        <% empty_id = @prior_work_time - first_work_time%>
+        <% prior_height = @duration_height%>
+        <div class="empty_box"
+             onclick="showAlert(<%= ((((work_order.time.strftime('%H').to_i) + ((work_order.time.strftime('%M').to_i)*(1.0/100)*(7/3)))*140)-(840+prior_height))%>)" id = "<%= empty_id %>"
+             style="position: absolute;
+               width: 100%;
+               top:<%=((((@prior_work_time.time.strftime('%H').to_i)-6)*140)+(((@prior_work_time.time.strftime('%M').to_i)/60.0)*140)+18) + ((@prior_work_duration/60.0)*140)%>px;
+               height:<%= (((((work_order.time.strftime('%H').to_i)) + (((work_order.time.strftime('%M').to_i)/60.0)))*140)-(840+prior_height))%>px">
 
 
+          <script> function showAlert(id){
 
-            <script> function showAlert(id){
 
+              alert ("There is " + (id/140)*60 + " minutes between work orders" );
+          }</script>
 
-                alert ("There is " + (id/140)*60 + " minutes between work orders" );
-            }</script>
+        </div>
 
-          </div>
-
-          <div class="work_order" id="<%= work_order.id %>"  style="height: <%= (work_order.duration/60.0) *140  %>px">
-            <% @locations.each do |location| %>
+          <div class="work_order" id="<%= work_order.id %>"
+               style=" width:100%;
+                 height: <%= (work_order.duration/60.0) *140 %>px;
+                 position: absolute;
+                 top: <%=((((work_order.time.strftime('%H').to_i)-6)*140) + (((work_order.time.strftime('%M').to_i)/60.0)*140))+18%>px">
+          <% @locations.each do |location| %>
             <% next unless work_order.location_id == location.id %>
-              Name:
-              <%=location.name %>
-              </br>
-              City:
-              <%= location.city %>
-              </br>
-              Start Time:
-              <%= work_order.time.strftime('%H:%M') %>
-              </br>
-              Price: $
-              <%= work_order.price %>
-              </br>
-              <% @prior_work_time = work_order.time %>
-              <% @duration_height = ((work_order.duration/60.0) *140) +((((work_order.time.strftime('%H').to_i) + ((work_order.time.strftime('%M').to_i)*(1.0/100)*(7/3)))*140)-(840+prior_height) + prior_height)%>
-              <% @final_box_height = @duration_height %>
-            <%end %>
+            Name:
+            <%=location.name %>
+            </br>
+            City:
+            <%= location.city %>
+            </br>
+            Start Time:
+            <%= work_order.time.strftime('%H:%M') %>
+            </br>
+            Price: $
+            <%= work_order.price %>
+
+            </br>
+            <% @prior_work_time = work_order.time %>
+            <% @duration_height = ((work_order.duration/60.0) *140) +((((work_order.time.strftime('%H').to_i) + ((work_order.time.strftime('%M').to_i)*(1.0/100)*(7/3)))*140)-(840+prior_height) + prior_height)%>
+            <% @final_box_height = @duration_height %>
+              <% @prior_work_duration = work_order.duration %>
+              <% @work_order_duration_height = (work_order.duration/60) *140 %>
+          <%end %>
 
 
 
@@ -66,15 +76,15 @@
 
 
 
-          </div>
+        </div>
 
 
-        <% end %>
-        <div class="empty_box" style="height: <%= 1690- @final_box_height %>px"></div>
+      <% end %>
+      <div class="empty_box" style="height: 1690px; border: 1px solid black"></div>
 
-      </section>
-    <%end %>
+    </section>
+  <%end %>
 
 
-  </div>
+</div>
 </div>
